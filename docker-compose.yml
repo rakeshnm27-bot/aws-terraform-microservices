@@ -1,0 +1,73 @@
+
+services:
+  learning-service:
+    build:
+      context: ./learning-service
+    image: devops-learning-service:local
+    container_name: learning-service
+    ports:
+      - "5001:5001"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_NAME: ${MYSQL_DATABASE:?Set MYSQL_DATABASE in .env}
+      DB_USER: ${MYSQL_USER:?Set MYSQL_USER in .env}
+      DB_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+    restart: unless-stopped
+    networks:
+      - portal-network
+
+
+  progress-service:
+    build:
+      context: ./progress-service
+    image: devops-progress-service:local
+    container_name: progress-service
+    ports:
+      - "5002:5002"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_NAME: ${MYSQL_DATABASE:?Set MYSQL_DATABASE in .env}
+      DB_USER: ${MYSQL_USER:?Set MYSQL_USER in .env}
+      DB_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+    restart: unless-stopped
+    networks:
+      - portal-network
+
+  mysql:
+    image: mysql:8.4
+    container_name: portal-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?Set MYSQL_DATABASE in .env}
+      MYSQL_USER: ${MYSQL_USER:?Set MYSQL_USER in .env}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    expose:
+      - "3306"
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - -h
+        - 127.0.0.1
+        - -uroot
+        - -p$${MYSQL_ROOT_PASSWORD}
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - portal-network
+
+volumes:
+  mysql-data:
+
+networks:
+  portal-network:
+    driver: bridge
