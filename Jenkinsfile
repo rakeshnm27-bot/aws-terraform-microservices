@@ -52,6 +52,7 @@ pipeline {
                 sh '''
                     docker tag devops-learning-service:ci devops-learning-service:local
                     docker tag devops-progress-service:ci devops-progress-service:local
+
                     docker save \
                       devops-learning-service:local \
                       devops-progress-service:local \
@@ -76,7 +77,8 @@ pipeline {
                         ssh -i "$SSH_KEY" \
                           -o StrictHostKeyChecking=accept-new \
                           "$SSH_USER@$EC2_HOST" \
-                          'docker info >/dev/null && test -d "$HOME/aws-terraform-microservices"'
+                          'docker info >/dev/null &&
+                           test -d "$HOME/aws-terraform-microservices"'
 
                         scp -i "$SSH_KEY" \
                           -o StrictHostKeyChecking=accept-new \
@@ -86,12 +88,32 @@ pipeline {
                         ssh -i "$SSH_KEY" \
                           -o StrictHostKeyChecking=accept-new \
                           "$SSH_USER@$EC2_HOST" \
-                          'docker load -i /tmp/deploy-images.tar &&
-                           cd "$HOME/aws-terraform-microservices" &&
-                           docker compose up -d --no-build learning-service progress-service &&
-                           rm -f /tmp/deploy-images.tar &&
-                           curl -fsS http://127.0.0.1:5001/health &&
-                           curl -fsS http://127.0.0.1:5002/health'
+                          'set -eu
+                           docker load -i /tmp/deploy-images.tar
+                           cd "$HOME/aws-terraform-microservices"
+                           docker compose up -d --no-build learning-service progress-service
+                           rm -f /tmp/deploy-images.tar
+
+                           for port in 5001 5002; do
+                             success=0
+                             for attempt in $(seq 1 10); do
+                               if curl --connect-timeout 2 --max-time 5 -fsS \
+                                  "http://127.0.0.1:$port/health"; then
+                                 echo
+                                 success=1
+                                 break
+                               fi
+                               sleep 3
+                             done
+
+                             if [ "$success" -ne 1 ]; then
+                               echo "Health check failed on port $port"
+                               docker compose logs --tail 40
+                               exit 1
+                             fi
+                           done
+
+                           echo "Deployment and health checks successful."'
                     '''
                 }
             }
