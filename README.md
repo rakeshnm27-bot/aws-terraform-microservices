@@ -270,3 +270,32 @@ EC2 Docker status, container logs, and application health endpoints.
 - Add application monitoring, structured logging, and alerting.
 - Introduce a more secure deployment identity and automated infrastructure
   checks in CI.
+
+### Example Terraform variables
+
+A placeholder example is provided at
+`terraform/environments/dev/terraform.tfvars.example`.
+
+Create your local variables file from the example:
+
+```bash
+cd terraform/environments/dev
+cp terraform.tfvars.example terraform.tfvars
+```
+
+Edit `terraform.tfvars` and replace `YOUR_PUBLIC_IP/32` with your trusted
+public IP in CIDR notation and `YOUR_EXISTING_EC2_KEY_PAIR_NAME` with the
+name of an existing EC2 key pair.
+
+The real `terraform.tfvars` file is ignored by Git. Never commit actual
+credentials, private keys, Terraform state, or generated plan files.
+
+Initialize and validate the configuration:
+
+```bash
+terraform init
+terraform validate
+terraform plan
+```
+
+Review the plan carefully before making any infrastructure changes.
