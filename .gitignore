@@ -4,3 +4,13 @@ terraform/.terraform/
 terraform/terraform.tfstate
 terraform/terraform.tfstate.*
 terraform/tfplan
+
+# Terraform generated files and local sensitive configuration
+**/.terraform/*
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfvars
+!**/*.tfvars.example
+**/tfplan
+**/plan.out
+crash.log
