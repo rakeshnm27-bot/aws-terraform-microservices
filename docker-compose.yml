@@ -6,7 +6,7 @@ services:
     image: devops-learning-service:local
     container_name: learning-service
     ports:
-      - "5001:5001"
+      - "127.0.0.1:5001:5001"
     environment:
       DB_HOST: mysql
       DB_PORT: "3306"
@@ -24,7 +24,7 @@ services:
     image: devops-progress-service:local
     container_name: progress-service
     ports:
-      - "5002:5002"
+      - "127.0.0.1:5002:5002"
     environment:
       DB_HOST: mysql
       DB_PORT: "3306"
