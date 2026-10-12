@@ -11,6 +11,16 @@ as code, deployment automation, service health checks, and troubleshooting.
 The DevOps Learning Portal provides learning-path and progress APIs for
 topics such as AWS, Terraform, Docker, and Jenkins.
 
+## Application Screenshots
+
+### DevOps Learning Portal Dashboard
+
+![DevOps Learning Portal Dashboard](docs/screenshots/learning-portal-dashboard-1.png)
+
+### Learning Progress and Course Details
+
+![Learning Progress and Course Details](docs/screenshots/learning-portal-dashboard-2.png)
+
 ### Technology Stack
 
 | Area | Technology |
