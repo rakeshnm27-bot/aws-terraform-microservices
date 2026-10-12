@@ -71,3 +71,17 @@ volumes:
 networks:
   portal-network:
     driver: bridge
+
+  frontend:
+    build:
+      context: ./frontend
+    image: devops-learning-portal-frontend:local
+    container_name: learning-portal-frontend
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      - learning-service
+      - progress-service
+    restart: unless-stopped
+    networks:
+      - portal-network

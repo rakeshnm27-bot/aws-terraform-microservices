@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevOps Learning Portal</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">D</div>
+      <div>
+        <h1>DevOps Learning Portal</h1>
+        <p>YOUR CLOUD ENGINEERING JOURNEY</p>
+      </div>
+    </div>
+    <div class="system-status">
+      <span class="status-dot"></span>
+      <span id="system-status">Connecting to services...</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="welcome">
+      <div>
+        <p class="eyebrow">LEARNING DASHBOARD</p>
+        <h2>Build skills. Track progress. <span>Ship confidently.</span></h2>
+        <p class="subtitle">Your personal workspace for mastering modern DevOps and cloud technologies.</p>
+      </div>
+      <button id="refresh-btn" onclick="loadDashboard()">↻ Refresh data</button>
+    </section>
+
+    <section class="stats">
+      <article class="stat-card">
+        <div class="stat-label">Learning paths</div>
+        <div class="stat-value" id="path-count">—</div>
+        <div class="stat-note">Technologies to explore</div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-label">Paths in progress</div>
+        <div class="stat-value" id="active-count">—</div>
+        <div class="stat-note">Currently being learned</div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-label">Average quiz score</div>
+        <div class="stat-value" id="average-score">—</div>
+        <div class="stat-note">Across recorded assessments</div>
+      </article>
+    </section>
+
+    <section class="section-heading">
+      <div>
+        <p class="eyebrow">YOUR CURRICULUM</p>
+        <h2>Learning paths</h2>
+      </div>
+      <span class="section-caption">Live data from Flask APIs</span>
+    </section>
+
+    <section id="learning-paths" class="course-grid">
+      <div class="loading-card">Loading your learning paths...</div>
+    </section>
+
+    <footer>
+      <span>DevOps Learning Portal</span>
+      <span>Flask · MySQL · Docker · Nginx · AWS</span>
+    </footer>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
